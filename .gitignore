@@ -1,0 +1,46 @@
+# === SECRETS (CRITICAL — NEVER COMMIT) ===
+# Contains real API keys and tokens — keep this out of version control
+.env
+credentials.json
+token.json
+tokens.json
+# === PYTHON ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# === MACOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# === WINDOWS ===
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === EDITORS ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === LOGS ===
+*.log
+logs/
+
+# === TESTING ===
+.pytest_cache/
+.coverage
+htmlcov/

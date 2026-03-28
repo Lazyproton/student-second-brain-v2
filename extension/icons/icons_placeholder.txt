@@ -1,0 +1,2 @@
+Add your icon PNG files here: icon16.png, icon48.png, icon128.png
+You can generate free icons at: https://www.favicon-generator.org

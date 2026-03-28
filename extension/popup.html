@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Second Brain</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Base ──────────────────────────────────────────────────── */
+    body {
+      width: 380px;
+      min-height: 320px;
+      background: #1a1a2e;
+      color: #e8e8f0;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px 10px;
+      background: linear-gradient(135deg, #12122a 0%, #1a1a3e 100%);
+      border-bottom: 1px solid #ffffff12;
+    }
+
+    .header-logo { font-size: 22px; line-height: 1; }
+
+    .header-title {
+      font-size: 15px;
+      font-weight: 700;
+      background: linear-gradient(90deg, #a78bfa, #60a5fa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.3px;
+    }
+
+    /* ── Tab bar ────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      background: #13131f;
+      border-bottom: 1px solid #ffffff0f;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px 6px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #666;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
+    }
+    .tab-btn:hover { color: #bbb; background: #ffffff08; }
+    .tab-btn.active { color: #a78bfa; border-bottom-color: #7c3aed; }
+
+    /* ── Tab panels ────────────────────────────────────────────── */
+    .tab-panel {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px;
+      flex: 1;
+    }
+    .tab-panel.active { display: flex; }
+
+    /* ── Typography ────────────────────────────────────────────── */
+    .panel-heading {
+      font-size: 14px;
+      font-weight: 700;
+      color: #e8e8f0;
+      letter-spacing: -0.2px;
+    }
+
+    .panel-hint {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    /* ── Buttons ────────────────────────────────────────────────── */
+    .btn {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:hover  { opacity: 0.88; }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #059669, #047857);
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #dc2626, #b91c1c);
+      color: #fff;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-group .btn { flex: 1; }
+
+    .btn-icon {
+      padding: 6px 10px;
+      font-size: 14px;
+      width: auto;
+      background: #1e1e38;
+      border: 1px solid #ffffff18;
+      border-radius: 6px;
+      color: #aaa;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-icon:hover { background: #2a2a50; color: #fff; }
+
+    /* ── Text input ─────────────────────────────────────────────── */
+    .text-input {
+      width: 100%;
+      padding: 9px 12px;
+      background: #13131f;
+      border: 1px solid #ffffff18;
+      border-radius: 8px;
+      color: #e8e8f0;
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .text-input:focus { border-color: #7c3aed88; }
+    .text-input::placeholder { color: #44445a; }
+
+    /* ── Status messages ────────────────────────────────────────── */
+    .status {
+      display: none;
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1.4;
+      animation: fadeIn 0.2s ease;
+    }
+    .status.visible  { display: block; }
+    .status.success  { background: #0d2318; color: #4ade80; border: 1px solid #4ade8033; }
+    .status.error    { background: #2a1010; color: #f87171; border: 1px solid #f8717133; }
+    .status.loading  { background: #15152a; color: #a78bfa; border: 1px solid #7c3aed33; }
+
+    /* ── Dashboard header row ───────────────────────────────────── */
+    .dashboard-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* ── Results / exam cards ───────────────────────────────────── */
+    .results-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 200px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #333 transparent;
+    }
+
+    .result-card {
+      padding: 8px 10px;
+      background: #13131f;
+      border: 1px solid #ffffff0d;
+      border-radius: 7px;
+      font-size: 12px;
+      color: #c8c8e8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: background 0.15s;
+      cursor: pointer;
+    }
+    .result-card:hover { background: #1d1d38; color: #e8e8ff; }
+
+    .result-card .card-date {
+      font-size: 11px;
+      color: #555;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* ── Empty state ────────────────────────────────────────────── */
+    .empty-hint {
+      text-align: center;
+      color: #444;
+      font-size: 12px;
+      padding: 20px 0;
+    }
+
+    /* ── Subject picker ─────────────────────────────────────────── */
+    .picker-label {
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .subject-select {
+      width: 100%;
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      background: #13131f;
+      color: #e8e8f0;
+      border: 1px solid #ffffff18;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      appearance: auto;
+    }
+    .subject-select:focus { outline: none; border-color: #7c3aed88; }
+    .subject-select option { background: #1a1a2e; }
+
+    .new-subject-row {
+      display: none;
+      flex-direction: row;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .new-subject-row.visible { display: flex; }
+    .new-subject-row .text-input { flex: 1; }
+    .btn-add {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #7c3aed, #4f46e5);
+      color: #fff;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: opacity 0.15s;
+    }
+    .btn-add:hover { opacity: 0.88; }
+
+    /* ── Animations ─────────────────────────────────────────────── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(3px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <span class="header-logo">🧠</span>
+    <span class="header-title">Student Second Brain</span>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="capture">📄 Capture</button>
+    <button class="tab-btn" data-tab="youtube">🎬 YouTube</button>
+    <button class="tab-btn" data-tab="codeforces">⚔️ CF</button>
+    <button class="tab-btn" data-tab="query">🔍 Query</button>
+    <button class="tab-btn" data-tab="dashboard">📅 Exams</button>
+  </div>
+
+  <!-- ── TAB 1: Capture ──────────────────────────────────────── -->
+  <div id="tab-capture" class="tab-panel active">
+    <p class="panel-heading">Capture Page</p>
+    <p class="panel-hint">
+      Selected text will be captured. If nothing is selected, the full page is captured.
+    </p>
+
+    <!-- Subject picker -->
+    <label class="picker-label" for="subject-select">Save to subject:</label>
+    <select id="subject-select" class="subject-select">
+      <option value="">General Notes</option>
+      <option value="new">+ New Subject</option>
+    </select>
+
+    <!-- New subject row (shown only when "+ New Subject" is selected) -->
+    <div id="new-subject-input" class="new-subject-row">
+      <input id="new-subject-name" class="text-input"
+             type="text" placeholder="Enter subject name..." autocomplete="off" />
+      <button id="confirm-new-subject" class="btn-add">Add</button>
+    </div>
+
+    <button id="btn-capture" class="btn btn-primary">💾 Capture to Notion</button>
+    <div id="status-capture" class="status"></div>
+  </div>
+
+  <!-- ── TAB 2: YouTube ──────────────────────────────────────── -->
+  <div id="tab-youtube" class="tab-panel">
+    <p class="panel-heading">YouTube Capture</p>
+    <p class="panel-hint">Detects the YouTube video on the current tab automatically.</p>
+    <button id="btn-youtube" class="btn btn-primary">🎬 Capture Transcript</button>
+    <div id="status-youtube" class="status"></div>
+  </div>
+
+  <!-- ── TAB 3: Codeforces ───────────────────────────────────── -->
+  <div id="tab-codeforces" class="tab-panel">
+    <p class="panel-heading">Codeforces Problem</p>
+    <p class="panel-hint">Detects the Codeforces problem on the current tab automatically.</p>
+    <div class="btn-group">
+      <button id="btn-cf-solved" class="btn btn-success">✅ Mark Solved</button>
+      <button id="btn-cf-unsolved" class="btn btn-danger">❌ Mark Unsolved</button>
+    </div>
+    <div id="status-codeforces" class="status"></div>
+  </div>
+
+  <!-- ── TAB 4: Query ────────────────────────────────────────── -->
+  <div id="tab-query" class="tab-panel">
+    <p class="panel-heading">Search Notes</p>
+    <input
+      id="input-query"
+      class="text-input"
+      type="text"
+      placeholder="Search your Notion notes..."
+      autocomplete="off"
+    />
+    <button id="btn-query" class="btn btn-primary">🔍 Search</button>
+    <div id="results-query" class="results-list"></div>
+  </div>
+
+  <!-- ── TAB 5: Dashboard ────────────────────────────────────── -->
+  <div id="tab-dashboard" class="tab-panel">
+    <div class="dashboard-header">
+      <p class="panel-heading">Upcoming Exams</p>
+      <button id="btn-refresh-exams" class="btn-icon" title="Refresh">↻</button>
+    </div>
+    <div id="exams-list" class="results-list">
+      <p class="empty-hint">Click ↻ to load upcoming exams.</p>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

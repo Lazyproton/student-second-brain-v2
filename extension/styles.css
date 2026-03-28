@@ -1,0 +1,235 @@
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-card: #0f3460;
+  --accent: #7c3aed;
+  --accent-hover: #6d28d9;
+  --text-primary: #ffffff;
+  --text-secondary: #a0aec0;
+  --success: #48bb78;
+  --error: #fc8181;
+  --border: #2d3748;
+}
+
+/* 1. Base styles */
+body {
+  background: var(--bg-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--text-primary);
+  width: 380px;
+  min-height: 500px;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Tab bar */
+.tab-bar {
+  display: flex;
+  width: 100%;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  cursor: pointer;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  background: #1a274a; /* slightly lighter bg-secondary */
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* 3. Tab content */
+.tab-panel {
+  display: none;
+  padding: 16px;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.tab-panel > div {
+  padding-bottom: 12px;
+}
+
+/* 4. Buttons */
+.btn {
+  width: 100%;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: transform 0.1s, background 0.2s, opacity 0.2s;
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+}
+
+.btn:active {
+  transform: scale(0.98);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 5. Side by side buttons (Codeforces tab) */
+.btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-group .btn {
+  flex: 1;
+}
+
+/* 6. Input fields */
+.text-input, input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-family: inherit;
+  box-sizing: border-box; /* ensure padding doesn't affect 100% width */
+  transition: border-color 0.2s;
+}
+
+.text-input:focus, input[type="text"]:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* 7. Status messages */
+.status {
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  margin-top: 8px;
+  display: none; /* Hidden by default */
+}
+
+.status.visible {
+  display: block;
+}
+
+.status.success {
+  background: #1a4731;
+  color: var(--success);
+  border: 1px solid var(--success);
+}
+
+.status.error {
+  background: #4a1515;
+  color: var(--error);
+  border: 1px solid var(--error);
+}
+
+/* 8. Search results */
+.result-card {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: block;
+  text-decoration: none;
+}
+
+.result-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.result-summary {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.result-link {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+/* 9. Exam cards */
+.exam-card {
+  background: var(--bg-card);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-left: 3px solid var(--accent);
+}
+
+.exam-card.urgent {
+  border-left-color: var(--error);
+}
+
+.exam-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.exam-meta {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* 10. Headings */
+.panel-heading, h1, h2, h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--text-primary);
+}
+
+/* 11. Small helper text */
+.panel-hint, .helper-text {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* 12. Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border);
+}
