@@ -215,7 +215,21 @@ def get_upcoming_exams():
             print("[notion_writer] NOTION_CALENDAR_DB_ID is not set.")
             return []
         
-        response = notion.databases.query(database_id=notion_calendar_db_id)
+        response = notion.databases.query(
+            database_id=notion_calendar_db_id,
+            filter={
+                "property": "Date",
+                "date": {
+                    "on_or_after": datetime.today().strftime("%Y-%m-%d")
+                }
+            },
+            sorts=[
+                {
+                    "property": "Date",
+                    "direction": "ascending"
+                }
+            ]
+        )
         
         results = response.get("results", [])
         
